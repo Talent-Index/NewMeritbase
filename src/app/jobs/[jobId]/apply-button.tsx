@@ -1,21 +1,29 @@
+
 "use client";
 
 import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { applyForJob } from "@/lib/actions";
-import { Loader2 } from "lucide-react";
-import { MOCK_FREELANCERS } from "@/lib/data";
+import { Loader2, Wallet } from "lucide-react";
+import { useAccount } from "wagmi";
 
 export function ApplyButton({ jobId }: { jobId: string }) {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const { address, isConnected } = useAccount();
 
   const handleApply = () => {
+    if (!address) {
+        toast({
+            title: "Wallet Not Connected",
+            description: "Please connect your wallet to apply.",
+            variant: "destructive"
+        });
+        return;
+    }
     startTransition(async () => {
-      // In a real app, the current user's ID would come from the session.
-      const freelancerId = MOCK_FREELANCERS[0].id;
-      const result = await applyForJob(jobId, freelancerId);
+      const result = await applyForJob(jobId, address);
 
       if (result.success) {
         toast({
@@ -32,8 +40,20 @@ export function ApplyButton({ jobId }: { jobId: string }) {
     });
   };
 
+  if (!isConnected) {
+    return (
+        <div className="flex flex-col items-center justify-center gap-4 text-center p-6 border-2 border-dashed rounded-lg bg-secondary/30">
+            <Wallet className="h-8 w-8 text-muted-foreground" />
+            <p className="font-semibold">Connect your wallet to apply</p>
+            <p className="text-sm text-muted-foreground">
+                Your CVWallet is tied to your wallet address. Please connect to continue.
+            </p>
+        </div>
+    );
+  }
+
   return (
-    <Button onClick={handleApply} disabled={isPending} size="lg" className="w-full">
+    <Button onClick={handleApply} disabled={isPending || !isConnected} size="lg" className="w-full">
       {isPending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
