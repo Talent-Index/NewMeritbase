@@ -98,7 +98,9 @@ export default function FreelancerDashboardPage() {
                                 </TableCell>
                                 <TableCell className="text-right">${job.budget.toLocaleString()}</TableCell>
                                 <TableCell className="text-right">
-                                    <Button size="sm">View & Apply</Button>
+                                    <Button size="sm" asChild>
+                                        <Link href={`/jobs/${job.id}`}>View & Apply</Link>
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}

@@ -4,11 +4,14 @@ import { z } from 'zod';
 import { freelancerSchema, employerSchema, jobPostSchema } from '@/lib/schemas';
 import { Freelancer, Job } from '@/lib/definitions';
 import { aiShortlistFreelancers } from '@/ai/flows/ai-shortlist-freelancers';
-import { MOCK_FREELANCERS } from '@/lib/data';
+import { MOCK_FREELANCERS, MOCK_JOBS } from '@/lib/data';
 import { sleep } from './utils';
+import { revalidatePath } from 'next/cache';
 
 // This is a mock in-memory store. In a real app, you'd use a database.
-const MOCK_JOBS: Job[] = [];
+const JOBS_STORE: Job[] = [...MOCK_JOBS];
+const APPLICATIONS_STORE: { jobId: string; freelancerId: string }[] = [];
+
 
 export async function registerFreelancer(values: z.infer<typeof freelancerSchema>) {
   const validatedFields = freelancerSchema.safeParse(values);
@@ -65,20 +68,46 @@ export async function postJob(values: z.infer<typeof jobPostSchema>) {
         postedAt: new Date(),
     };
 
-    MOCK_JOBS.unshift(newJob);
+    JOBS_STORE.unshift(newJob);
     console.log('New job posted:', newJob.title);
+
+    revalidatePath('/dashboard/employer');
+    revalidatePath('/dashboard/freelancer');
 
     return { success: 'Job posted successfully!', job: newJob };
 }
 
 export async function getPostedJobs(): Promise<Job[]> {
     await sleep(500);
-    return MOCK_JOBS;
+    return JOBS_STORE;
 }
 
 export async function getJobById(jobId: string): Promise<Job | undefined> {
     await sleep(200);
-    return MOCK_JOBS.find(job => job.id === jobId);
+    // In a real app, we should also fetch jobs from MOCK_JOBS if they aren't in the store
+    const allJobs = [...JOBS_STORE, ...MOCK_JOBS.filter(j => !JOBS_STORE.some(s => s.id === j.id))];
+    return allJobs.find(job => job.id === jobId);
+}
+
+export async function applyForJob(jobId: string, freelancerId: string) {
+    await sleep(1000);
+
+    const job = await getJobById(jobId);
+    if (!job) {
+        return { error: 'Job not found.' };
+    }
+
+    const alreadyApplied = APPLICATIONS_STORE.find(
+        app => app.jobId === jobId && app.freelancerId === freelancerId
+    );
+    if (alreadyApplied) {
+        return { error: 'You have already applied for this job.' };
+    }
+
+    APPLICATIONS_STORE.push({ jobId, freelancerId });
+    console.log(`Freelancer ${freelancerId} applied for job ${jobId}`);
+
+    return { success: `Successfully applied for "${job.title}"!` };
 }
 
 
