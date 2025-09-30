@@ -29,10 +29,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { freelancerSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { registerFreelancer } from "@/lib/actions";
-import { Loader2, FileText, Webcam, Linkedin, Github, Briefcase, ArrowLeft, ArrowRight } from "lucide-react";
+import { Loader2, FileText, Webcam, Linkedin, Github, Briefcase, ArrowLeft, ArrowRight, Sparkles, PlusCircle } from "lucide-react";
 import { WalletAuthentication } from "@/components/wallet-connect";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
+import { aiEnhanceSummary } from "@/ai/flows/ai-enhance-summary";
+import { POPULAR_SKILLS } from "@/lib/skills";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 
 const steps = [
   { id: 1, title: 'Profile & Skills', fields: ['fullName', 'email', 'skills', 'summary'] },
@@ -44,15 +48,18 @@ const steps = [
 export function FreelancerSignupForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isPending, startTransition] = useTransition();
+  const [isAiPending, startAiTransition] = useTransition();
   const router = useRouter();
   const { toast } = useToast();
+  
+  const [customSkill, setCustomSkill] = useState("");
 
   const form = useForm<z.infer<typeof freelancerSchema>>({
     resolver: zodResolver(freelancerSchema),
     defaultValues: {
       fullName: "",
       email: "",
-      skills: "",
+      skills: [],
       summary: "",
       linkedin: "",
       github: "",
@@ -63,7 +70,11 @@ export function FreelancerSignupForm() {
 
   const onSubmit = (values: z.infer<typeof freelancerSchema>) => {
     startTransition(async () => {
-      const result = await registerFreelancer(values);
+        const dataToSubmit = {
+            ...values,
+            skills: values.skills.join(', '),
+        };
+      const result = await registerFreelancer(dataToSubmit as any); // The schema expects a string, but our action is flexible.
       if (result.success) {
         toast({
           title: "dCV Created!",
@@ -79,6 +90,51 @@ export function FreelancerSignupForm() {
       }
     });
   };
+
+  const handleAiEnhance = () => {
+    const currentSummary = form.getValues("summary");
+    if (!currentSummary || currentSummary.length < 20) {
+      toast({
+        title: "Summary too short",
+        description: "Please write a brief summary first (at least 20 characters).",
+        variant: "destructive"
+      });
+      return;
+    }
+    startAiTransition(async () => {
+      try {
+        const result = await aiEnhanceSummary({ summary: currentSummary });
+        if (result.enhancedSummary) {
+          form.setValue("summary", result.enhancedSummary);
+          toast({
+            title: "Summary Enhanced!",
+            description: "Your professional summary has been improved by AI.",
+          });
+        }
+      } catch (e) {
+        toast({
+            title: "AI Error",
+            description: "Could not enhance summary at this time.",
+            variant: "destructive"
+        })
+      }
+    });
+  }
+  
+  const toggleSkill = (skill: string) => {
+    const currentSkills = form.getValues("skills");
+    const newSkills = currentSkills.includes(skill)
+      ? currentSkills.filter(s => s !== skill)
+      : [...currentSkills, skill];
+    form.setValue("skills", newSkills, { shouldValidate: true });
+  }
+
+  const addCustomSkill = () => {
+    if (customSkill && !form.getValues("skills").includes(customSkill)) {
+      toggleSkill(customSkill);
+      setCustomSkill("");
+    }
+  }
 
   const nextStep = async () => {
     const fieldsToValidate = steps[currentStep - 1].fields;
@@ -152,9 +208,54 @@ export function FreelancerSignupForm() {
                 render={({ field }) => (
                     <FormItem>
                     <FormLabel>Your Skills</FormLabel>
-                    <FormControl>
-                        <Textarea placeholder="List your skills, separated by commas (e.g., React, Solidity, UI/UX Design)" {...field} />
-                    </FormControl>
+                    <div className="flex items-center gap-2">
+                        <Input 
+                            placeholder="e.g., Python"
+                            value={customSkill}
+                            onChange={(e) => setCustomSkill(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    addCustomSkill();
+                                }
+                            }}
+                        />
+                        <Button type="button" variant="outline" size="icon" onClick={addCustomSkill} aria-label="Add Skill">
+                            <PlusCircle className="h-5 w-5"/>
+                        </Button>
+                    </div>
+                     <ScrollArea className="h-48 w-full rounded-md border p-2">
+                        <div className="flex flex-wrap gap-2">
+                            {POPULAR_SKILLS.map(skill => (
+                                <button
+                                    key={skill}
+                                    type="button"
+                                    onClick={() => toggleSkill(skill)}
+                                    className="p-0 m-0 border-0 bg-transparent"
+                                >
+                                    <Badge variant={field.value.includes(skill) ? "default" : "secondary"} className="cursor-pointer">
+                                        {skill}
+                                    </Badge>
+                                </button>
+                            ))}
+                        </div>
+                    </ScrollArea>
+                    <FormDescription>Select your skills or add your own. Selected skills:</FormDescription>
+                    <div className="flex flex-wrap gap-1">
+                        {field.value.length > 0 ? (
+                             field.value.map(skill => (
+                                <Badge key={skill} variant="outline" className="flex items-center gap-1">
+                                    {skill}
+                                    <button type="button" onClick={() => toggleSkill(skill)} className="text-muted-foreground hover:text-foreground">
+                                        &times;
+                                    </button>
+                                </Badge>
+                            ))
+                        ) : (
+                            <p className="text-xs text-muted-foreground">No skills selected.</p>
+                        )}
+                       
+                    </div>
                     <FormMessage />
                     </FormItem>
                 )}
@@ -168,6 +269,17 @@ export function FreelancerSignupForm() {
                     <FormControl>
                         <Textarea placeholder="Tell us about your experience and what makes you a great hire." className="min-h-[100px]" {...field} />
                     </FormControl>
+                    <FormDescription>
+                        You can write your own, or let our AI help you.
+                    </FormDescription>
+                    <Button type="button" variant="outline" size="sm" onClick={handleAiEnhance} disabled={isAiPending}>
+                        {isAiPending ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                            <Sparkles className="mr-2 h-4 w-4 text-purple-400" />
+                        )}
+                        AI Enhance
+                    </Button>
                     <FormMessage />
                     </FormItem>
                 )}

@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const freelancerSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
-  skills: z.string().min(10, { message: 'Please list at least one skill.' }),
+  skills: z.array(z.string()).min(1, { message: 'Please select at least one skill.' }),
   summary: z.string().min(50, { message: 'Summary must be at least 50 characters.' }),
   // File uploads are not properly validated here, as this is a prototype
   cv: z.any().optional(),
