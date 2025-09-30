@@ -1,3 +1,58 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-abstract",
+      "description": "Abstract network graphic for the hero section.",
+      "imageUrl": "https://images.unsplash.com/photo-1738082956220-a1f20a8632ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhYnN0cmFjdCUyMG5ldHdvcmt8ZW58MHx8fHwxNzU5MTQ0NDg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract network"
+    },
+    {
+      "id": "feature-portfolio",
+      "description": "Image for the decentralized CVWallet feature.",
+      "imageUrl": "https://images.unsplash.com/photo-1632255657991-ce622acebecd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwcm9mZXNzaW9uYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzU5MjE0MDk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional portfolio"
+    },
+    {
+      "id": "feature-handshake",
+      "description": "Image for the verified employer feature.",
+      "imageUrl": "https://images.unsplash.com/photo-1758518730384-be3d205838e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxvZmZpY2UlMjBoYW5kc2hha2V8ZW58MHx8fHwxNzU5MjE0MTAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "office handshake"
+    },
+    {
+      "id": "feature-ai",
+      "description": "Image for the AI matching feature.",
+      "imageUrl": "https://images.unsplash.com/photo-1580584126903-c17d41830450?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmdXR1cmlzdGljJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3NTkxMzk1MjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "futuristic technology"
+    },
+    {
+      "id": "avatar-1",
+      "description": "Avatar for a mock freelancer.",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc1OTE3MTY1OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "avatar-2",
+      "description": "Avatar for a mock freelancer.",
+      "imageUrl": "https://images.unsplash.com/photo-1583195763986-0231686dcd43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NTkxNzE5NzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "avatar-3",
+      "description": "Avatar for a mock freelancer.",
+      "imageUrl": "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NTkyMDk1OTZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "avatar-4",
+      "description": "Avatar for a mock freelancer.",
+      "imageUrl": "https://images.unsplash.com/photo-1719087358997-12957d0859e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3b21hbiUyMHNtaWxpbmd8ZW58MHx8fHwxNzU5MTA5ODM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman smiling"
+    },
+    {
+      "id": "avatar-5",
+      "description": "Avatar for a mock freelancer.",
+      "imageUrl": "https://images.unsplash.com/photo-1618077360395-f3068be8e001?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYW4lMjBnbGFzc2VzfGVufDB8fHx8MTc1OTEzNTA1OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man glasses"
+    }
+  ]
 }
