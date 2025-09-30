@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +29,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { freelancerSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { registerFreelancer } from "@/lib/actions";
-import { Loader2, FileText, Webcam, Linkedin, Github, Briefcase, ArrowLeft, ArrowRight, Sparkles, PlusCircle } from "lucide-react";
+import { Loader2, FileText, Webcam, Linkedin, Github, Briefcase, ArrowLeft, ArrowRight, Sparkles, PlusCircle, Camera, CheckCircle } from "lucide-react";
 import { WalletAuthentication } from "@/components/wallet-connect";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
@@ -37,10 +37,12 @@ import { aiEnhanceSummary } from "@/ai/flows/ai-enhance-summary";
 import { POPULAR_SKILLS } from "@/lib/skills";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import Image from 'next/image';
 
 const steps = [
   { id: 1, title: 'Profile & Skills', fields: ['fullName', 'email', 'skills', 'summary'] },
-  { id: 2, title: 'CV & Biodata', fields: ['cv', 'govId'] },
+  { id: 2, title: 'CV & Biodata', fields: ['cv', 'govId', 'selfie'] },
   { id: 3, title: 'External Profiles', fields: ['linkedin', 'github', 'fiverr', 'upwork'] },
   { id: 4, title: 'Connect & Create' },
 ];
@@ -53,6 +55,14 @@ export function FreelancerSignupForm() {
   const { toast } = useToast();
   
   const [customSkill, setCustomSkill] = useState("");
+
+  // Selfie state
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [selfieImage, setSelfieImage] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
 
   const form = useForm<z.infer<typeof freelancerSchema>>({
     resolver: zodResolver(freelancerSchema),
@@ -67,6 +77,75 @@ export function FreelancerSignupForm() {
       upwork: "",
     },
   });
+
+  const stopCameraStream = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
+
+  useEffect(() => {
+    if (!isCameraOpen) {
+      stopCameraStream();
+      return;
+    }
+
+    const getCameraPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({video: true});
+        setHasCameraPermission(true);
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        setHasCameraPermission(false);
+        setIsCameraOpen(false);
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings to use this app.',
+        });
+      }
+    };
+
+    getCameraPermission();
+    
+    // Cleanup on component unmount or when camera is closed
+    return () => {
+      stopCameraStream();
+    }
+  }, [isCameraOpen, toast]);
+
+
+  const handleStartLivenessCheck = () => {
+    setSelfieImage(null);
+    setIsCameraOpen(true);
+  };
+
+  const handleTakeSelfie = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext('2d');
+      context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/png');
+      setSelfieImage(dataUrl);
+      stopCameraStream();
+    }
+  };
+  
+  const handleConfirmSelfie = () => {
+      if (selfieImage) {
+          form.setValue('selfie', selfieImage, { shouldValidate: true });
+          setIsCameraOpen(false);
+      }
+  };
 
   const onSubmit = (values: z.infer<typeof freelancerSchema>) => {
     startTransition(async () => {
@@ -307,7 +386,7 @@ export function FreelancerSignupForm() {
                     <FormItem>
                         <FormLabel className="flex items-center gap-2"><FileText className="h-4 w-4" /> Upload CV (PDF)</FormLabel>
                         <FormControl>
-                        <Input type="file" accept=".pdf" {...field} />
+                        <Input type="file" accept=".pdf" onChange={(e) => field.onChange(e.target.files)} />
                         </FormControl>
                         <FormDescription>Your CV will be stored securely.</FormDescription>
                         <FormMessage />
@@ -321,7 +400,7 @@ export function FreelancerSignupForm() {
                     <FormItem>
                         <FormLabel className="flex items-center gap-2"><FileText className="h-4 w-4" /> Government ID (PDF)</FormLabel>
                         <FormControl>
-                        <Input type="file" accept=".pdf" {...field} />
+                        <Input type="file" accept=".pdf" onChange={(e) => field.onChange(e.target.files)} />
                         </FormControl>
                         <FormDescription>Used for verification, stored securely.</FormDescription>
                         <FormMessage />
@@ -329,16 +408,72 @@ export function FreelancerSignupForm() {
                     )}
                 />
                 </div>
-                <div className="p-4 border rounded-lg flex flex-col items-center text-center gap-2 bg-background/50">
-                    <Webcam className="h-8 w-8 text-muted-foreground"/>
-                    <FormLabel>Live Selfie Verification</FormLabel>
-                    <FormDescription className="mb-2">We'll use your camera to confirm you're a real person.</FormDescription>
-                    <Button type="button" variant="outline">
-                        <Webcam className="mr-2 h-4 w-4"/>
-                        Start Liveness Check
-                    </Button>
-                    <FormMessage />
-                </div>
+                <FormField
+                    control={form.control}
+                    name="selfie"
+                    render={({ field }) => (
+                    <FormItem>
+                        <div className="p-4 border rounded-lg flex flex-col items-center text-center gap-4 bg-background/50">
+                        <Webcam className="h-8 w-8 text-muted-foreground"/>
+                        <FormLabel>Live Selfie Verification</FormLabel>
+                        
+                        { isCameraOpen ? (
+                            <div className="w-full max-w-md space-y-4">
+                                <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
+                                    {selfieImage ? (
+                                        <Image src={selfieImage} alt="Captured selfie" layout="fill" objectFit="contain" />
+                                    ) : (
+                                        <video ref={videoRef} className="h-full w-full object-cover" autoPlay playsInline muted />
+                                    )}
+                                    <canvas ref={canvasRef} className="hidden" />
+                                </div>
+                                {hasCameraPermission === false && (
+                                    <Alert variant="destructive">
+                                        <AlertTitle>Camera Access Denied</AlertTitle>
+                                        <AlertDescription>Please enable camera permissions to continue.</AlertDescription>
+                                    </Alert>
+                                )}
+                                <div className="flex justify-center gap-4">
+                                    {selfieImage ? (
+                                        <>
+                                            <Button type="button" variant="outline" onClick={handleStartLivenessCheck}>Retake</Button>
+                                            <Button type="button" onClick={handleConfirmSelfie}>Confirm Selfie</Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button type="button" onClick={handleTakeSelfie} disabled={hasCameraPermission === false}>
+                                                <Camera className="mr-2 h-4 w-4"/>
+                                                Take Selfie
+                                            </Button>
+                                            <Button type="button" variant="outline" onClick={() => setIsCameraOpen(false)}>Cancel</Button>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <FormDescription className="mb-2">We'll use your camera to confirm you're a real person.</FormDescription>
+                                { field.value ? (
+                                    <div className="flex flex-col items-center gap-2 text-green-500">
+                                        <CheckCircle className="h-6 w-6" />
+                                        <p>Selfie captured!</p>
+                                        <Button type="button" variant="outline" size="sm" onClick={handleStartLivenessCheck}>
+                                            Retake Selfie
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <Button type="button" variant="outline" onClick={handleStartLivenessCheck}>
+                                        <Webcam className="mr-2 h-4 w-4"/>
+                                        Start Liveness Check
+                                    </Button>
+                                )}
+                            </>
+                        )}
+                        <FormMessage />
+                        </div>
+                    </FormItem>
+                    )}
+                />
             </CardContent>
             </Card>
         )}
@@ -428,3 +563,5 @@ export function FreelancerSignupForm() {
     </Form>
   );
 }
+
+    

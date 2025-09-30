@@ -8,6 +8,7 @@ export const freelancerSchema = z.object({
   // File uploads are not properly validated here, as this is a prototype
   cv: z.any().optional(),
   govId: z.any().optional(),
+  selfie: z.any().optional(),
   // Optional external profile links
   linkedin: z.string().url().optional().or(z.literal('')),
   github: z.string().url().optional().or(z.literal('')),
@@ -28,3 +29,5 @@ export const jobPostSchema = z.object({
     skills: z.string().min(3, { message: 'Please list required skills.' }),
     budget: z.coerce.number().min(1, { message: 'Budget must be a positive number.' }),
 });
+
+    
