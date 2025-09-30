@@ -10,7 +10,7 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Icons.logo className="h-6 w-6" />
+            <Icons.logo className="h-6 w-6 text-primary" />
             <span className="hidden font-bold sm:inline-block">
               MeritBase
             </span>
@@ -37,9 +37,9 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
+        <div className="flex items-center gap-2">
           <ConnectButton />
+          <ThemeToggle />
         </div>
       </div>
     </header>

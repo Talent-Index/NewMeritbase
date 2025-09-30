@@ -9,8 +9,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MOCK_FREELANCERS, MOCK_JOBS } from "@/lib/data";
-import { Star, Edit } from "lucide-react";
+import { Star, Edit, DollarSign, Activity } from "lucide-react";
 import Link from "next/link";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 // In a real app, you'd get the logged-in freelancer's data.
 const freelancer = MOCK_FREELANCERS[0];
@@ -21,98 +29,107 @@ export default function FreelancerDashboardPage() {
         : "N/A";
 
   return (
-    <div className="p-4 sm:p-6 md:p-8">
-      <div className="grid gap-8">
-        <header className="space-y-1.5">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl font-headline">
-            Welcome, {freelancer.name}!
-          </h1>
-          <p className="text-muted-foreground">
-            Here's your hub for finding gigs, managing your profile, and tracking your reputation.
-          </p>
-        </header>
-
-        <div className="grid gap-8 lg:grid-cols-3">
-            {/* Left Column: Profile */}
-            <div className="lg:col-span-1 space-y-8">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Your CVWallet</CardTitle>
-                        <Button variant="ghost" size="icon" asChild>
-                            <Link href="#"><Edit className="h-4 w-4" /></Link>
-                        </Button>
-                    </CardHeader>
-                    <CardContent className="flex flex-col items-center text-center">
-                        <Avatar className="h-24 w-24 mb-4">
-                            <AvatarImage src={freelancer.avatarUrl} alt={freelancer.name} />
-                            <AvatarFallback>{freelancer.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <h2 className="text-xl font-semibold font-headline">{freelancer.name}</h2>
-                        <p className="text-muted-foreground">Rate: ${freelancer.rate}/hr</p>
-                        <div className="flex flex-wrap gap-2 justify-center mt-4">
-                            {freelancer.skills.slice(0, 5).map(skill => (
-                                <Badge key={skill} variant="secondary">{skill}</Badge>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>On-Chain Reputation</CardTitle>
-                        <CardDescription>
-                            <span className="flex items-center gap-1">
-                                <Star className="h-4 w-4 text-yellow-400" />
-                                Average Rating: {averageRating} ({freelancer.reviews.length} reviews)
-                            </span>
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {freelancer.reviews.map(review => (
-                            <div key={review.id} className="text-sm">
-                                <div className="flex items-center gap-1">
-                                    {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className={`h-4 w-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground'}`} />
-                                    ))}
-                                </div>
-                                <p className="mt-1">"{review.comment}"</p>
-                                <p className="text-xs text-muted-foreground text-right">- {review.reviewer}</p>
-                            </div>
-                        ))}
-                         {freelancer.reviews.length === 0 && <p className="text-sm text-muted-foreground text-center">No reviews yet.</p>}
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Right Column: Matched Gigs */}
-            <div className="lg:col-span-2">
-                <Card>
-                    <CardHeader>
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Hourly Rate</CardTitle>
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">${freelancer.rate}/hr</div>
+                    <p className="text-xs text-muted-foreground">Based on your profile</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Reputation</CardTitle>
+                    <Star className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">{averageRating}</div>
+                    <p className="text-xs text-muted-foreground">
+                        From {freelancer.reviews.length} reviews
+                    </p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Matched Gigs</CardTitle>
+                    <Activity className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">+{MOCK_JOBS.length}</div>
+                    <p className="text-xs text-muted-foreground">Potential jobs available</p>
+                </CardContent>
+            </Card>
+        </div>
+        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+            <Card className="xl:col-span-2">
+                <CardHeader className="flex flex-row items-center">
+                    <div className="grid gap-2">
                         <CardTitle>Potential Job Matches</CardTitle>
                         <CardDescription>
                             Gigs you might be interested in based on your skills.
                         </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Job</TableHead>
+                                <TableHead>Skills</TableHead>
+                                <TableHead className="text-right">Budget</TableHead>
+                                <TableHead className="text-right">Apply</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                         {MOCK_JOBS.map(job => (
-                            <div key={job.id} className="p-4 border rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                <div className="flex-1">
-                                    <h3 className="font-semibold">{job.title}</h3>
-                                    <p className="text-sm text-muted-foreground">{job.companyName} · Budget: ${job.budget.toLocaleString()}</p>
-                                    <div className="flex flex-wrap gap-1 mt-2">
-                                        {job.skills.map(skill => (
-                                            <Badge key={skill} variant="outline">{skill}</Badge>
-                                        ))}
+                            <TableRow key={job.id}>
+                                <TableCell>
+                                    <div className="font-medium">{job.title}</div>
+                                    <div className="text-sm text-muted-foreground">{job.companyName}</div>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex flex-wrap gap-1">
+                                        {job.skills.map(skill => <Badge key={skill} variant="outline">{skill}</Badge>)}
                                     </div>
-                                </div>
-                                <Button>View & Apply</Button>
-                            </div>
+                                </TableCell>
+                                <TableCell className="text-right">${job.budget.toLocaleString()}</TableCell>
+                                <TableCell className="text-right">
+                                    <Button size="sm">View & Apply</Button>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </CardContent>
-                </Card>
-            </div>
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between pb-4">
+                    <CardTitle>Your CVWallet</CardTitle>
+                    <Button variant="ghost" size="icon" asChild>
+                        <Link href="#"><Edit className="h-4 w-4" /></Link>
+                    </Button>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center text-center">
+                    <Avatar className="h-24 w-24 mb-4">
+                        <AvatarImage src={freelancer.avatarUrl} alt={freelancer.name} />
+                        <AvatarFallback>{freelancer.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <h2 className="text-xl font-semibold font-headline">{freelancer.name}</h2>
+                    <p className="text-muted-foreground">{freelancer.email}</p>
+                    <div className="flex flex-wrap gap-2 justify-center mt-4">
+                        {freelancer.skills.slice(0, 5).map(skill => (
+                            <Badge key={skill} variant="secondary">{skill}</Badge>
+                        ))}
+                    </div>
+                     <p className="text-sm text-muted-foreground mt-4 text-left">{freelancer.summary}</p>
+                </CardContent>
+            </Card>
         </div>
-      </div>
     </div>
   );
 }
