@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Icons } from "@/components/icons";
-import { WalletConnect } from "@/components/wallet-connect";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export function Header() {
   return (
@@ -17,7 +17,7 @@ export function Header() {
           </Link>
           <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
             <Link
-              href="#features"
+              href="/#features"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
               Features
@@ -37,12 +37,9 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <ThemeToggle />
-          <WalletConnect />
-          <Button asChild>
-            <Link href="/dashboard">Dashboard</Link>
-          </Button>
+          <ConnectButton />
         </div>
       </div>
     </header>
