@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const config = getDefaultConfig({
   appName: "MeritBase",
-  projectId: "YOUR_PROJECT_ID", // Replace with your WalletConnect Project ID
+  projectId: "044601f6521369c8b8b8b8f415f5a4de", // Using a public ID
   chains: [polygon, mainnet, hardhat],
   ssr: true,
 });
