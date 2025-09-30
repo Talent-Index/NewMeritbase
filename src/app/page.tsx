@@ -1,162 +1,147 @@
 import { Button } from '@/components/ui/button';
-import { ArrowUpRight } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CheckCircle, Briefcase, Bot, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const features = [
   {
-    title: 'Decentralized CVs',
-    description:
-      'Own and control your professional history with a CV that lives on the blockchain, immune to censorship or alteration.',
-    icon: '/icons/cv.svg',
+    icon: <Briefcase className="h-10 w-10 text-primary" />,
+    title: 'Decentralized CVWallet',
+    description: 'Create and manage a portable, verifiable CV on the blockchain. Your data, your control.',
+    image: {
+      url: 'https://picsum.photos/seed/1/600/400',
+      hint: 'professional portfolio'
+    }
   },
   {
-    title: 'Verified Credentials',
-    description:
-      'Leverage Web3 to prove your skills and qualifications, building undeniable trust with potential employers.',
-    icon: '/icons/credentials.svg',
+    icon: <Users className="h-10 w-10 text-primary" />,
+    title: 'Verified Employer Profiles',
+    description: 'Connect with legitimate companies whose identities are verified on-chain, reducing fraud.',
+    image: {
+      url: 'https://picsum.photos/seed/2/600/400',
+      hint: 'office handshake'
+    }
   },
   {
-    title: 'AI-Powered Matching',
-    description:
-      'Our intelligent algorithms connect you with the most relevant gigs, based on your verified experience and skills.',
-    icon: '/icons/match.svg',
+    icon: <Bot className="h-10 w-10 text-primary" />,
+    title: 'AI-Assisted Job Matching',
+    description: 'Our intelligent algorithms match your skills with the perfect gig, saving you time and effort.',
+    image: {
+      url: 'https://picsum.photos/seed/3/600/400',
+      hint: ' futuristic technology'
+    }
   },
 ];
 
-const stats = [
-  { value: '10k+', label: 'Verified Freelancers' },
-  { value: '5k+', label: 'Gigs successfully matched' },
-  { value: '2M+', label: 'On-chain credentials' },
-  { value: '98%', label: 'Employer satisfaction rate' },
+const steps = [
+  {
+    role: 'Freelancer',
+    items: [
+      'Create your CVWallet',
+      'Get your skills verified',
+      'Get matched with premium gigs',
+      'Build your on-chain reputation',
+    ],
+  },
+  {
+    role: 'Employer',
+    items: [
+      'Verify your company profile',
+      'Post a job in minutes',
+      'Receive an AI-shortlisted talent pool',
+      'Hire with confidence',
+    ],
+  },
 ];
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
-      <section className="relative w-full overflow-hidden bg-gradient-to-b from-primary/5 via-primary/10 to-transparent pt-20">
+    <div className="flex flex-col min-h-[100dvh]">
+      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gray-50 dark:bg-gray-900">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-6 text-center">
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                The Future of Work,
-                <br />
-                Powered by Merit
-              </h1>
-              <p className="mx-auto max-w-[700px] text-lg text-muted-foreground md:text-xl">
-                MeritBase is a decentralized talent network where your
-                reputation is your resume. Build your on-chain CV, get matched
-                with top gigs, and own your professional identity.
-              </p>
+          <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
+            <div className="flex flex-col justify-center space-y-4">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
+                  The Future of Work is Decentralized
+                </h1>
+                <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                  MeritBase connects top talent with leading companies through a secure, transparent, and AI-powered gig economy platform.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <Button asChild size="lg" className="font-semibold">
+                  <Link href="/dashboard/freelancer">Find a Gig</Link>
+                </Button>
+                <Button asChild variant="secondary" size="lg" className="font-semibold">
+                  <Link href="/dashboard/employer">Post a Job</Link>
+                </Button>
+              </div>
             </div>
-            <div className="flex flex-col gap-4 min-[400px]:flex-row">
-              <Button asChild size="lg" className="font-semibold">
-                <Link href="/dashboard/freelancer">
-                  Find a Gig <ArrowUpRight className="ml-2" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="font-semibold"
-              >
-                <Link href="/dashboard/employer">Post a Job</Link>
-              </Button>
-            </div>
+            <Image
+              src="https://picsum.photos/seed/hero/600/600"
+              alt="Hero"
+              data-ai-hint="abstract network"
+              className="mx-auto aspect-square overflow-hidden rounded-xl object-cover sm:w-full lg:order-last"
+              width={600}
+              height={600}
+            />
           </div>
         </div>
-        <div className="relative mt-16 flex justify-center">
-          <Image
-            src="/images/hero-dashboard.png"
-            alt="MeritBase Dashboard"
-            width={1200}
-            height={675}
-            className="rounded-t-2xl border-x border-t shadow-2xl shadow-primary/10"
-            data-ai-hint="app dashboard"
-          />
-          <div className="absolute bottom-0 h-3/4 w-full bg-gradient-to-t from-background to-transparent" />
-        </div>
       </section>
 
-      <section className="w-full py-16 md:py-24 lg:py-32">
-        <div className="container grid grid-cols-2 items-center justify-center gap-4 px-4 text-center md:grid-cols-4 md:px-6">
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center">
-              <div className="text-4xl font-bold tracking-tighter sm:text-5xl">
-                {stat.value}
-              </div>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="features" className="w-full bg-secondary py-16 md:py-24">
+      <section id="features" className="w-full py-12 md:py-24 lg:py-32">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm text-primary">
-                Key Features
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                Why Freelancers Choose MeritBase
-              </h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
-                We provide the tools to build a portable, verifiable career
-                identity that works for you.
+              <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Key Features</div>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Why Choose MeritBase?</h2>
+              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                We leverage cutting-edge Web3 and AI technologies to build a fairer and more efficient gig marketplace.
               </p>
             </div>
           </div>
-          <div className="mx-auto mt-12 grid max-w-5xl items-start gap-8 sm:grid-cols-1 md:grid-cols-3">
-            {features.map((feature) => (
-              <div
-                key={feature.title}
-                className="flex flex-col items-center space-y-4 text-center"
-              >
-                <div className="rounded-full bg-primary/10 p-4">
-                  <Image
-                    src={feature.icon}
-                    alt={feature.title}
-                    width={40}
-                    height={40}
-                  />
-                </div>
-                <h3 className="text-xl font-bold">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </div>
+          <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-1 md:grid-cols-3 md:gap-12 lg:max-w-none lg:grid-cols-3 mt-12">
+            {features.map((feature, index) => (
+              <Card key={index} className="h-full transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <CardHeader className="flex flex-col items-center text-center">
+                  {feature.icon}
+                  <CardTitle className="mt-4 font-headline">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center text-muted-foreground">
+                  {feature.description}
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="w-full py-16 md:py-24 lg:py-32">
-        <div className="container grid items-center gap-8 px-4 md:grid-cols-2 md:px-6">
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              From Onboarding to On-Chain
+      <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32 bg-gray-50 dark:bg-gray-900">
+        <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
+          <div className="space-y-3">
+            <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight font-headline">
+              A Streamlined Process for Success
             </h2>
-            <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed">
-              Our platform guides you through creating your CVWallet, verifying
-              your credentials, and landing your first gig. Your professional
-              milestones are recorded on-chain, building a permanent record of
-              your achievements.
+            <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              Whether you're looking for work or seeking talent, our platform makes it simple.
             </p>
-            <Button asChild size="lg" className="font-semibold">
-              <Link href="/signup/freelancer">
-                Create Your CVWallet <ArrowUpRight className="ml-2" />
-              </Link>
-            </Button>
           </div>
-          <div className="flex justify-center">
-            <Image
-              src="/images/onchain-reputation.png"
-              alt="On-chain reputation"
-              width={550}
-              height={550}
-              className="rounded-xl shadow-lg"
-              data-ai-hint="blockchain visualization"
-            />
+          <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-1 md:grid-cols-2 md:gap-12 lg:max-w-none lg:grid-cols-2 mt-8">
+            {steps.map((step, index) => (
+              <Card key={index} className="p-6">
+                <h3 className="text-2xl font-bold font-headline text-primary mb-4">{step.role}</h3>
+                <ul className="space-y-2 text-left">
+                  {step.items.map((item, i) => (
+                    <li key={i} className="flex items-start">
+                      <CheckCircle className="mr-2 mt-1 h-5 w-5 flex-shrink-0 text-accent" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
