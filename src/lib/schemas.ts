@@ -8,6 +8,11 @@ export const freelancerSchema = z.object({
   // File uploads are not properly validated here, as this is a prototype
   cv: z.any().optional(),
   govId: z.any().optional(),
+  // Optional external profile links
+  linkedin: z.string().url().optional().or(z.literal('')),
+  github: z.string().url().optional().or(z.literal('')),
+  fiverr: z.string().url().optional().or(z.literal('')),
+  upwork: z.string().url().optional().or(z.literal('')),
 });
 
 export const employerSchema = z.object({
