@@ -1,16 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { FreelancerSignupForm } from "./freelancer-signup-form";
-import { User, Link as LinkIcon, Webcam, FileText, Bot, Wallet } from "lucide-react";
-import Link from "next/link";
-import { WalletAuthentication } from "@/components/wallet-connect";
-import { Button } from "@/components/ui/button";
 
+import { FreelancerSignupForm } from "./freelancer-signup-form";
+import { User } from "lucide-react";
+import Link from "next/link";
 
 export default function FreelancerSignupPage() {
   return (

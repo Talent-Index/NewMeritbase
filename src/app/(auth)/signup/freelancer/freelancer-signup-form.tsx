@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +29,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { freelancerSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { registerFreelancer } from "@/lib/actions";
-import { Loader2, FileText, Webcam, Linkedin, Github, Briefcase, Wallet } from "lucide-react";
+import { Loader2, FileText, Webcam, Linkedin, Github, Briefcase } from "lucide-react";
 import { WalletAuthentication } from "@/components/wallet-connect";
 import { Separator } from "@/components/ui/separator";
 
@@ -73,7 +74,7 @@ export function FreelancerSignupForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Step 1 & 2: Profile & Skills */}
+        {/* Step 1: Profile & Skills */}
         <Card className="bg-secondary/50">
           <CardHeader>
             <CardTitle>1. Profile & Skills</CardTitle>
@@ -139,7 +140,7 @@ export function FreelancerSignupForm() {
           </CardContent>
         </Card>
 
-        {/* Step 3: CV & Biodata */}
+        {/* Step 2: CV & Biodata */}
         <Card className="bg-secondary/50">
           <CardHeader>
             <CardTitle>2. CV & Biodata Verification (KYC)</CardTitle>
@@ -191,7 +192,7 @@ export function FreelancerSignupForm() {
           </CardContent>
         </Card>
 
-        {/* Step 4: Connect External Profiles */}
+        {/* Step 3: Connect External Profiles */}
         <Card className="bg-secondary/50">
             <CardHeader>
                 <CardTitle>3. Link External Profiles (Optional)</CardTitle>
@@ -231,7 +232,7 @@ export function FreelancerSignupForm() {
             </CardContent>
         </Card>
 
-        {/* Step 5: Connect Wallet & Create */}
+        {/* Step 4: Connect Wallet & Create */}
         <Card className="bg-secondary/50">
             <CardHeader>
                 <CardTitle>4. Connect Wallet & Create Your dCV</CardTitle>
