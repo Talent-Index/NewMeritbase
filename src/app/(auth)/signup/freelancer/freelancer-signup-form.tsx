@@ -103,7 +103,7 @@ export function FreelancerSignupForm() {
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
-        setIsCameraOpen(false);
+        setIsCameraOpen(true); // Keep the section open to show the error
         toast({
           variant: 'destructive',
           title: 'Camera Access Denied',
@@ -123,6 +123,7 @@ export function FreelancerSignupForm() {
 
   const handleStartLivenessCheck = () => {
     setSelfieImage(null);
+    setHasCameraPermission(null);
     setIsCameraOpen(true);
   };
 
@@ -419,20 +420,22 @@ export function FreelancerSignupForm() {
                         
                         { isCameraOpen ? (
                             <div className="w-full max-w-md space-y-4">
-                                <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
-                                    {selfieImage ? (
-                                        <Image src={selfieImage} alt="Captured selfie" layout="fill" objectFit="contain" />
-                                    ) : (
-                                        <video ref={videoRef} className="h-full w-full object-cover" autoPlay playsInline muted />
-                                    )}
-                                    <canvas ref={canvasRef} className="hidden" />
-                                </div>
-                                {hasCameraPermission === false && (
+                                {hasCameraPermission === false ? (
                                     <Alert variant="destructive">
                                         <AlertTitle>Camera Access Denied</AlertTitle>
-                                        <AlertDescription>Please enable camera permissions to continue.</AlertDescription>
+                                        <AlertDescription>Please enable camera permissions in your browser settings to continue.</AlertDescription>
                                     </Alert>
+                                ) : (
+                                    <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
+                                        {selfieImage ? (
+                                            <Image src={selfieImage} alt="Captured selfie" layout="fill" objectFit="contain" />
+                                        ) : (
+                                            <video ref={videoRef} className="h-full w-full object-cover" autoPlay playsInline muted />
+                                        )}
+                                        <canvas ref={canvasRef} className="hidden" />
+                                    </div>
                                 )}
+
                                 <div className="flex justify-center gap-4">
                                     {selfieImage ? (
                                         <>
@@ -441,7 +444,7 @@ export function FreelancerSignupForm() {
                                         </>
                                     ) : (
                                         <>
-                                            <Button type="button" onClick={handleTakeSelfie} disabled={hasCameraPermission === false}>
+                                            <Button type="button" onClick={handleTakeSelfie} disabled={hasCameraPermission !== true}>
                                                 <Camera className="mr-2 h-4 w-4"/>
                                                 Take Selfie
                                             </Button>
