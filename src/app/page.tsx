@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Briefcase, Bot, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const features = [
   {
@@ -23,9 +24,11 @@ const features = [
 ];
 
 export default function Home() {
+  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-abstract');
+
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background text-foreground">
-      <section className="w-full py-20 md:py-32 lg:py-40 bg-gradient-to-b from-background to-secondary">
+      <section className="w-full py-20 md:py-32 lg:py-40 bg-gradient-to-b from-background to-secondary/50">
         <div className="container px-4 md:px-6">
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex flex-col justify-center space-y-4">
@@ -47,14 +50,16 @@ export default function Home() {
               </div>
             </div>
             <div className="relative">
-              <Image
-                src="https://images.unsplash.com/photo-1554232456-8727a67f2b54?q=80&w=2070&auto=format&fit=crop"
-                alt="Hero"
-                data-ai-hint="abstract network"
-                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover"
-                width={700}
-                height={400}
-              />
+              {heroImage && (
+                <Image
+                  src={heroImage.imageUrl}
+                  alt={heroImage.description}
+                  data-ai-hint={heroImage.imageHint}
+                  className="mx-auto aspect-video overflow-hidden rounded-xl object-cover"
+                  width={700}
+                  height={400}
+                />
+              )}
                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent"></div>
             </div>
           </div>
@@ -84,7 +89,7 @@ export default function Home() {
         </div>
       </section>
       
-      <section id="cta" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/50">
+      <section id="cta" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/70">
         <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight font-headline">
