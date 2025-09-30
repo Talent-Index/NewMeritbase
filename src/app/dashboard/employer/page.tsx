@@ -13,35 +13,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { getPostedJobs } from "@/lib/actions";
-import { Activity, Briefcase, DollarSign, Users, CreditCard } from "lucide-react";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
+import { Activity, Briefcase, DollarSign, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
-const data = [
-  { name: "Jan", total: Math.floor(Math.random() * 2) + 1 },
-  { name: "Feb", total: Math.floor(Math.random() * 2) + 1 },
-  { name: "Mar", total: Math.floor(Math.random() * 3) + 2 },
-  { name: "Apr", total: Math.floor(Math.random() * 4) + 3 },
-  { name: "May", total: Math.floor(Math.random() * 4) + 3 },
-  { name: "Jun", total: Math.floor(Math.random() * 5) + 4 },
-  { name: "Jul", total: Math.floor(Math.random() * 5) + 4 },
-  { name: "Aug", total: Math.floor(Math.random() * 5) + 4 },
-  { name: "Sep", total: Math.floor(Math.random() * 3) + 2 },
-  { name: "Oct", total: Math.floor(Math.random() * 5) + 4 },
-  { name: "Nov", total: Math.floor(Math.random() * 2) + 1 },
-  { name: "Dec", total: Math.floor(Math.random() * 3) + 2 },
-];
+import { JobPostingChart } from "./job-posting-chart";
 
 export default async function EmployerDashboardPage() {
   const jobs = await getPostedJobs();
@@ -100,48 +76,7 @@ export default async function EmployerDashboardPage() {
         </Card>
       </div>
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <Card className="xl:col-span-2">
-          <CardHeader>
-            <CardTitle>Job Posting Trends</CardTitle>
-            <CardDescription>Monthly job posting history.</CardDescription>
-          </CardHeader>
-          <CardContent className="pl-2">
-            <ResponsiveContainer width="100%" height={350}>
-              <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" />
-                <XAxis
-                  dataKey="name"
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${value}`}
-                />
-                <Tooltip
-                  cursor={{ fill: 'hsl(var(--accent))', opacity: 0.1 }}
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--background))",
-                    borderColor: "hsl(var(--border))",
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="total"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth={2}
-                  dot={{ r: 4, fill: "hsl(var(--primary))" }}
-                  activeDot={{ r: 8, style: { stroke: "hsl(var(--primary))" } }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <JobPostingChart />
         <Card>
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
