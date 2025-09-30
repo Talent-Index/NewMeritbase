@@ -30,17 +30,17 @@ export default function Home() {
     <div className="flex flex-col min-h-[100dvh] bg-background text-foreground">
       <section className="w-full py-20 md:py-32 lg:py-40 bg-gradient-to-b from-background to-secondary/50">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
-            <div className="flex flex-col justify-center space-y-4">
+          <div className="grid gap-6 lg:grid-cols-1 lg:gap-12 items-center">
+            <div className="flex flex-col justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
                   The Future of Work is Decentralized
                 </h1>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
                   MeritBase connects top talent with leading companies through a secure, transparent, and AI-powered gig economy platform.
                 </p>
               </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+              <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
                 <Button asChild size="lg" className="font-semibold">
                   <Link href="/dashboard/freelancer">Find a Gig</Link>
                 </Button>
@@ -48,19 +48,6 @@ export default function Home() {
                   <Link href="/dashboard/employer">Post a Job</Link>
                 </Button>
               </div>
-            </div>
-            <div className="relative">
-              {heroImage && (
-                <Image
-                  src={heroImage.imageUrl}
-                  alt={heroImage.description}
-                  data-ai-hint={heroImage.imageHint}
-                  className="mx-auto aspect-video overflow-hidden rounded-xl object-cover"
-                  width={700}
-                  height={400}
-                />
-              )}
-               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent"></div>
             </div>
           </div>
         </div>
