@@ -68,3 +68,11 @@ You need to run two separate processes in parallel for the full application to w
    This runs the AI services that power features like summary enhancement and freelancer shortlisting.
 
 Once both servers are running, you can access the application in your browser.
+
+## Deployment
+
+This is a full-stack Next.js application that requires a Node.js server environment to run its Server Actions, API routes, and AI flows.
+
+**It cannot be deployed to static hosting services like GitHub Pages.**
+
+The recommended hosting platform for this project is **Firebase App Hosting**, which is designed to deploy server-rendered Next.js applications seamlessly. The `apphosting.yaml` file is already configured for this purpose.
