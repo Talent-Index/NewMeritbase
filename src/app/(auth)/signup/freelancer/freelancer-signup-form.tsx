@@ -545,23 +545,23 @@ export function FreelancerSignupForm() {
             </Card>
         )}
         
-        <div className="flex justify-between">
-            {currentStep > 1 && (
-                <Button type="button" variant="outline" onClick={prevStep}>
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Previous
-                </Button>
-            )}
-             {currentStep < steps.length && (
-                <Button type="button" onClick={nextStep} className="ml-auto">
-                    Next
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-            )}
-        </div>
+        <>
+            <div className="flex justify-between">
+                {currentStep > 1 && (
+                    <Button type="button" variant="outline" onClick={prevStep}>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Previous
+                    </Button>
+                )}
+                {currentStep < steps.length && (
+                    <Button type="button" onClick={nextStep} className="ml-auto">
+                        Next
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                )}
+            </div>
+        </>
       </form>
     </Form>
   );
 }
-
-    
