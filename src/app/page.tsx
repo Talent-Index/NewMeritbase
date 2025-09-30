@@ -1,9 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Briefcase, Bot, Users } from 'lucide-react';
-import Image from 'next/image';
+import { Briefcase, Bot, Users } from 'lucide-react';
 import Link from 'next/link';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const features = [
   {
@@ -24,16 +22,16 @@ const features = [
 ];
 
 export default function Home() {
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-abstract');
-
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-background text-foreground">
-      <section className="w-full py-20 md:py-32 lg:py-40 bg-gradient-to-b from-background to-secondary/50">
-        <div className="container px-4 md:px-6">
+    <div className="relative flex flex-col min-h-[100dvh] bg-background text-foreground overflow-hidden">
+      <div className="grid-background"></div>
+      
+      <section className="relative w-full py-20 md:py-32 lg:py-40 flex items-center justify-center">
+        <div className="container px-4 md:px-6 z-10">
           <div className="grid gap-6 lg:grid-cols-1 lg:gap-12 items-center">
             <div className="flex flex-col justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline text-shadow-primary">
                   The Future of Work is Decentralized
                 </h1>
                 <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
@@ -44,7 +42,7 @@ export default function Home() {
                 <Button asChild size="lg" className="font-semibold">
                   <Link href="/dashboard/freelancer">Find a Gig</Link>
                 </Button>
-                <Button asChild variant="secondary" size="lg" className="font-semibold">
+                <Button asChild variant="outline" size="lg" className="font-semibold border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
                   <Link href="/dashboard/employer">Post a Job</Link>
                 </Button>
               </div>
@@ -53,11 +51,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="features" className="w-full py-12 md:py-24 lg:py-32">
+      <section id="features" className="relative w-full py-12 md:py-24 lg:py-32 z-10">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm font-medium">Key Features</div>
+              <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm font-medium text-primary">Key Features</div>
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Why Choose MeritBase?</h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 We leverage cutting-edge Web3 and AI technologies to build a fairer and more efficient gig marketplace.
@@ -66,7 +64,7 @@ export default function Home() {
           </div>
           <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-1 md:grid-cols-3 md:gap-12 lg:max-w-none lg:grid-cols-3 mt-12">
             {features.map((feature, index) => (
-              <div key={index} className="flex flex-col items-center text-center gap-4 p-6 rounded-lg border border-border bg-secondary/50">
+              <div key={index} className="flex flex-col items-center text-center gap-4 p-6 rounded-lg border border-border bg-background/50 backdrop-blur-sm transition-all hover:border-primary/50 hover:bg-black/20">
                   {feature.icon}
                   <h3 className="text-xl font-bold font-headline">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
@@ -76,7 +74,7 @@ export default function Home() {
         </div>
       </section>
       
-      <section id="cta" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/70">
+      <section id="cta" className="relative w-full py-12 md:py-24 lg:py-32 bg-secondary/30 z-10">
         <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight font-headline">
@@ -90,7 +88,7 @@ export default function Home() {
                 <Button asChild size="lg" className="font-semibold">
                   <Link href="/signup/freelancer">Become a Freelancer</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="font-semibold">
+                <Button asChild variant="outline" size="lg" className="font-semibold border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
                   <Link href="/signup/employer">Hire Talent</Link>
                 </Button>
             </div>
