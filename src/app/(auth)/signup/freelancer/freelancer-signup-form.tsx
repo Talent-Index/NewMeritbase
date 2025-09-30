@@ -33,11 +33,8 @@ export function FreelancerSignupForm() {
     defaultValues: {
       fullName: "",
       email: "",
-      phone: "",
       skills: "",
       summary: "",
-      fiverrUrl: "",
-      upworkUrl: "",
     },
   });
 
